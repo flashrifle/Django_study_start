@@ -4,7 +4,9 @@ from shortener.forms import RegisterForm
 from shortener.models import Users
 from django.contrib.auth import login, authenticate, logout
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm, PasswordResetForm
+from django.core.paginator import Paginator
 
 def index(request):
     user = Users.objects.filter(id=request.user.id).first()
@@ -65,3 +67,12 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     return redirect("index")
+
+@login_required #로그아웃 상태일시 로그인 페이지로 이동하게 해주는 기능
+def list_view(request):
+    page = int(request.GET.get("p",1))
+    users = Users.objects.all().order_by("-id") # 오름차순 정렬
+    paginator = Paginator(users, 10)
+    users = paginator.get_page(page)
+
+    return render(request, "boards.html", {"users":users})
