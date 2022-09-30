@@ -1,36 +1,91 @@
+from django.contrib.auth.forms import AuthenticationForm, PasswordResetForm, PasswordChangeForm
 from django.http.response import JsonResponse
-from django.shortcuts import render, redirect
-from shortener.forms import RegisterForm, LoginForm
-from shortener.models import Users
-from django.contrib.auth import login, authenticate, logout
+from shortener.models import ShortenedUrls, Users
+from django.shortcuts import redirect, render
 from django.views.decorators.csrf import csrf_exempt
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm, PasswordResetForm
+from shortener.forms import RegisterForm, LoginForm, UrlCreateForm
+from django.contrib.auth import login, authenticate, logout
 from django.core.paginator import Paginator
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+
 
 def index(request):
     user = Users.objects.filter(id=request.user.id).first()
     email = user.email if user else "Anonymus User!"
-    print("Logged in?", request.user.is_authenticated) # 로그인이 되었는가
+    print("Logged in?", request.user.is_authenticated)  # 로그인이 되었는가
     if request.user.is_authenticated is False:
-        email = "Anonymus User!" # 로그인이 안됐다면 출력됨
+        email = "Anonymus User!"  # 로그인이 안됐다면 출력됨
     print(email)
     return render(request, "base.html", {"welcome_msg": "hello"})
 
-@csrf_exempt # 사이트 위변조 방지 코드
+
+def url_list(request):
+    get_list = ShortenedUrls.objects.order_by("-created_at").all()
+    return render(request, "url_list.html", {"list": get_list})
+
+
+@login_required
+def url_create(request):
+    msg = None
+    if request.method == "POST":
+        form = UrlCreateForm(request.POST)
+        if form.is_valid():
+            msg = f"{form.cleaned_data.get('nick_name')} 생성 완료!"
+            messages.add_message(request, messages.INFO, msg)
+            form.save(request)
+            return redirect("url_list")
+        else:
+            form = UrlCreateForm()
+    else:
+        form = UrlCreateForm()
+    return render(request, "url_create.html", {"form": form})
+
+
+@login_required
+def url_change(request, action, url_id):
+    if request.method == "POST":
+        url_data = ShortenedUrls.objects.filter(id=url_id)
+        if url_data.exists():
+            if url_data.first().created_by_id != request.user.id:
+                msg = "자신이 소유하지 않은 URL 입니다."
+            else:
+                if action == "delete":
+                    msg = f"{url_data.first().nick_name} 삭제 완료!"
+                    url_data.delete()
+                    messages.add_message(request, messages.INFO, msg)
+                elif action == "update":
+                    msg = f"{url_data.first().nick_name} 수정 완료!"
+                    form = UrlCreateForm(request.POST)
+                    form.update_form(request, url_id)
+
+                    messages.add_message(request, messages.INFO, msg)
+        else:
+            msg = "해당 URL 정보를 찾을 수 없습니다."
+
+    elif request.method == "GET" and action == "update":
+        url_data = ShortenedUrls.objects.filter(pk=url_id).first()
+        form = UrlCreateForm(instance=url_data)
+        return render(request, "url_create.html", {"form": form, "is_update": True})
+
+    return redirect("url_list")
+
+
+@csrf_exempt  # 사이트 위변조 방지 코드
 def get_user(request, user_id):
     print(user_id)
-    if request.method == ('GET'):
+    if request.method == ("GET"):
         abc = request.GET.get("abc")
         xyz = request.GET.get("xyz")
         user = Users.objects.filter(pk=user_id).first()
-        return render(request, "base.html", {"user":user, "params":[abc,xyz]})
+        return render(request, "base.html", {"user": user, "params": [abc, xyz]})
     elif request.method == "POST":
         username = request.GET.get("username")
         if username:
             user = Users.objects.filter(pk=user_id).update(username=username)
-        
+
         return JsonResponse(status=201, data=dict(msg="Yot Just reached with Post Method"), safe=False)
+
 
 def register(request):
     if request.method == "POST":
@@ -43,10 +98,11 @@ def register(request):
             user = authenticate(username=username, password=raw_password)
             login(request, user)
             msg = "회원가입 완료"
-        return render(request, "register.html", {"form":form, "msg":msg})
+        return render(request, "register.html", {"form": form, "msg": msg})
     else:
         form = RegisterForm()
-        return render(request, "register.html", {"form":form})
+        return render(request, "register.html", {"form": form})
+
 
 def login_view(request):
     is_ok = False
@@ -76,15 +132,17 @@ def login_view(request):
     print("REMEMBER_ME: ", request.session.get("remember_me"))
     return render(request, "login.html", {"form": form, "msg": msg, "is_ok": is_ok})
 
+
 def logout_view(request):
     logout(request)
     return redirect("login")
 
-@login_required #로그아웃 상태일시 로그인 페이지로 이동하게 해주는 기능
+
+@login_required  # 로그아웃 상태일시 로그인 페이지로 이동하게 해주는 기능
 def list_view(request):
-    page = int(request.GET.get("p",1))
-    users = Users.objects.all().order_by("-id") # 오름차순 정렬
+    page = int(request.GET.get("p", 1))
+    users = Users.objects.all().order_by("-id")  # 오름차순 정렬
     paginator = Paginator(users, 10)
     users = paginator.get_page(page)
 
-    return render(request, "boards.html", {"users":users})
+    return render(request, "boards.html", {"users": users})
