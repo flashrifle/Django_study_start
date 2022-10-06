@@ -13,32 +13,51 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-import debug_toolbar
+from shortener.urls.views import url_redirect
+from shortener.urls.urls import router as url_router
+from shrinkers.settings import DEBUG
+
+# if DEBUG:
+#     import debug_toolbar
 from django.conf.urls import include
-from shortener.views import (
-    index,
-    get_user,
-    list_view,
-    register,
-    login_view,
-    logout_view,
-    url_list,
-    url_create,
-    url_change,
-)
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, re_path
+from rest_framework import permissions
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
+from ninja import NinjaAPI
+from shortener.users.apis import user as user_router
+
+schema_view = get_schema_view(
+    openapi.Info(
+        title="Shrinkers API",
+        default_version="v1",
+        description="Test description",
+        terms_of_service="https://www.google.com/policies/terms/",
+        contact=openapi.Contact(email="contact@snippets.local"),
+        license=openapi.License(name="BSD License"),
+    ),
+    public=True,
+    permission_classes=(permissions.AllowAny,),
+)
+
+
+apis = NinjaAPI(title="Shrinkers API")
+apis.add_router("/users/", user_router, tags=["Users"])
 
 urlpatterns = [
+    re_path(r"^swagger(?P<format>\.json|\.yaml)$", schema_view.without_ui(cache_timeout=0), name="schema-json"),
+    re_path(r"^swagger/$", schema_view.with_ui("swagger", cache_timeout=0), name="schema-swagger-ui"),
+    re_path(r"^redoc/$", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"),
     path("admin/", admin.site.urls),
-    # path("__debug__/", include(debug_toolbar.urls)),  # Django Debug Tool
-    path("", index, name="index"),
-    path("register", register, name="register"),
-    path("login", login_view, name="login"),
-    path("urls", url_list, name="url_list"),
-    path("urls/create", url_create, name="url_create"),
-    path("urls/<str:action>/<int:url_id>", url_change, name="url_change"),
-    path("logout", logout_view, name="logout"),
-    path("list", list_view, name="list_view"),
-    path("get_user/<int:user_id>", get_user),
+    path("", include("shortener.index.urls")),
+    path("urls/", include("shortener.urls.urls")),
+    path("api/", include(url_router.urls)),
+    path("ninja-api/", apis.urls),
+    path("<str:prefix>/<str:url>", url_redirect),
 ]
+
+# if DEBUG:
+#     urlpatterns += [
+#         path("__debug__/", include(debug_toolbar.urls)),  # Django Debug Tool
+#     ]

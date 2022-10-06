@@ -33,7 +33,6 @@ else:
 ALLOWED_HOSTS = ["*"]  # 모든 host를 허용
 
 # Application definition
-AUTH_USER_MODEL = "shortener.Users"
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -41,10 +40,18 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    'drf_yasg',
     "shortener",
+    "rest_framework",
+    "django_user_agents",
     # "debug_toolbar",  # Django Debug Toolbar
     # "django_seed",
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 20
+}
 
 INTERNAL_IPS = [
     "127.0.0.1",  # Django Debug Toolbar
@@ -60,8 +67,15 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "django_user_agents.middleware.UserAgentMiddleware",
     # "debug_toolbar.middleware.DebugToolbarMiddleware",  # Django Debug Toolbar
 ]
+
+GEOIP_PATH = os.path.join(BASE_DIR, "geolite2")
+# if DEBUG:
+#     MIDDLEWARE += [
+#         "debug_toolbar.middleware.DebugToolbarMiddleware",  # Django Debug Toolbar
+#     ]
 
 ROOT_URLCONF = "shrinkers.urls"
 
@@ -89,8 +103,16 @@ WSGI_APPLICATION = "shrinkers.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.mysql",
+        "NAME": "app_db",
+        "USER": "root",
+        "PASSWORD" : "rokaf0922@",
+        "HOST" : "34.64.123.167",
+        "PORT" : 3306,
+        "OPTIONS" : {
+            "autocommit" : True,
+            "charset" : "utf8mb4"
+        }
     }
 }
 
