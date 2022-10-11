@@ -81,6 +81,7 @@ class UrlListView(viewsets.ModelViewSet):
             .values("count", "web_browser", "created_at__date")
             .order_by("-created_at__date")
         )
+        print(browers)
         browers = (
             queryset.values("web_browser")
             .annotate(count=Count("id"))

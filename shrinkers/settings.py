@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 import os
 from pathlib import Path
+from google.oauth2 import service_account
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -151,9 +152,20 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
-STATIC_URL = "/static/"
+#STATIC_URL = "/static/"
+
+GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
+    os.path.join(BASE_DIR, "shrinkers/service_key.json")
+)
+DEFAULT_FILE_STORAGE = "config.storage_backends.GoogleCloudMediaStorage"
+STATICFILES_STORAGE = "config.storage_backends.GoogleCloudStaticStorage"
+GS_STATIC_BUCKET_NAME = "shrinkers-leejaem"
+STATIC_URL = "https://storage.googleapis.com/{}/statics/".format(GS_STATIC_BUCKET_NAME)
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
+# pip install 'django-storages[google]'
+# pip install google-auth
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"

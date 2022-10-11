@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "oval-bot-364102",
+  "private_key_id": "d43f66c6f775983a7cf3bc1f9ceccbb273086f22",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDjSbIuIjhI3CtE\nEeyIFn1ZK80QntRPJ7xw1ZSbmAdV59pInYgDWgZFSTKL+qft5UD+rOb3TFHPanMv\ndzL//xvuCINvnGkE4iX2P8HMLKV5H6SxYDtnkGxZvAbBBXZoxqJC/q+nw3P1Uj8p\nhAl8XLZfhe3WOVaLjbkl21HeTpeEdXC4R9sABiQe46g86qq6vjTuU1H+tLYEmdDJ\ntt8AVwtVeepGMDtc3ju2vNg5MeA4xbGD+WqyaJnr1R2lf/QbaG1ddDIVhD+feknv\n/ua95/legaB6cM+JxwGlOUHviLX0yvEQgZXD4N9Yx0lOirbTNUS/n9H6MHZBGm3K\nu5BfI5vNAgMBAAECggEAIJsnLF6c3/jz3QNMQTamu1bhB4AdmZBsBGzjcZHVBZIq\nGq48v6xXx3NJhNLL6gEwOojf5nzEpMKS7S2Gu7pjjZmbj3SrDTgLNaEuYmXKRE7R\nj9+sDf6mSJZEisbHlp7eUsmaNfFAbqJirMhEGxrqz9fVB504qPMHK2LkAwYXzvjL\nzCR/oo7ise31n1Aasf1zGtvmjkyC3YqsrvtLEZCLpIw5NqsJz4L/we+kDjJCrWnH\nCdEbMuT7CsigR9E+D0ghjlhL5ZuiDbGFbCOhfB1jHzhdpMoqIkQU/hDeapAU6O9E\njgueG/u+J9qTk7LEZg79LphMB2YFgAca+D2DwBy+UQKBgQD9fk39fgBJJBsYpWIJ\nKgOa9xe6+fNmO+ePmlbrsKoR88hUjPIULb0uyDMFZGNT4TAIuZJgSkuld1yrVrK1\nlX6FHXu6Oq8xaxkepmkUi/ZtWD82rXpnrJD2RLDXJSj2zj0TlRCcbmyWiN93u3Q0\nExhGfVufjdvh3yZIthVOHXZD0QKBgQDliQ31oZgkmSLZzA1fRFx+2dUHCjnwNzQ5\n2zC08LmjA/0jXWf9r49LFWyStGVPyXbWY8lDDnoszhAW+EK4XYOqtosMfJzE0Epn\nCzq8ncKZB7krWoLAs1V5J0mpYo6KWKvKQ3zlYsXyd2ex0W7TRXFnPOVjnSFRKOY5\nXtXQgQoDPQKBgQCpQtzwlmG6dNFi84syc0tU/ghqYNuVOAq2aGgBmET3F8B8NGCv\n+JqJ0kO/Jfjs2UApkz+Z7AH2ymymO424kcmZOMaU4vp4FPsA7Dzd61bwTCxpZgyF\njUR+K/+oqLdhlPRTTwV4boMzQNF2MUS2QMnEx4+WSjK37ziw9GPldOazAQKBgQCw\n9vSjPt3MwZ/j6PUaUNs7FXiu/8xhjj4eqQYpSjrlGqsse9Qz+wlv6umVRa2iUQHl\nEnPV1jCNoKU5AFh4Sei8UhZsHxrChpAGV9sGFl80mobBjPun09t/F7Ir/IdG1ExG\nGbgOJhPU9wgkSQK3sh9XZ9S28yr/ppew/ZO9N+9fRQKBgEVJdY5GDrXxgZ/SKxXX\n8qCyiP8AK8WyLRSJLUlWl04PUuYxXbzraur0O00RCGdGPlVfJQAev0RelIMqRIqF\nyreyzF921VcaLThgtW64qTbGoYrXQwS5bs1dSOwG3U0ohMUEjPQuYrY48XCgPtS0\nKQg7OIntvccq20RQpEc/aLg1\n-----END PRIVATE KEY-----\n",
+  "client_email": "shrinkers-leejaem@oval-bot-364102.iam.gserviceaccount.com",
+  "client_id": "113115829441331704475",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/shrinkers-leejaem%40oval-bot-364102.iam.gserviceaccount.com"
+}
